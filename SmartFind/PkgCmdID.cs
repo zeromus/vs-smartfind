@@ -6,6 +6,7 @@ namespace ChristianZangl.SmartFind
 {
   static class PkgCmdIDList
   {
-    public const uint cmdidResetSmartFind =        0x100;
+    public const uint cmdidResetSmartFind0 =        0x100;
+		public const uint cmdidResetSmartFind1 = 0x101;
   };
 }

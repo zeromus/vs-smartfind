@@ -38,7 +38,7 @@ namespace ChristianZangl.SmartFind
   [Guid(GuidList.guidSmartFindPkgString)]
   public sealed class SmartFindPackage : Package
   {
-    public static readonly string SettingsFile;
+		public static readonly string[] SettingsFile = new string[2];
     public static SmartFindPackage Instance { get; private set; }
 
     /// <summary>
@@ -64,7 +64,8 @@ namespace ChristianZangl.SmartFind
         if (Directory.Exists(dir)) break;
       }
       Directory.CreateDirectory(dir);
-      SettingsFile=Path.Combine(dir, "SmartFind.vssettings");
+      SettingsFile[0] = Path.Combine(dir, "SmartFind.vssettings");
+			SettingsFile[1] = Path.Combine(dir, "SmartFind1.vssettings");
     }
 
     /// <summary>
@@ -80,10 +81,15 @@ namespace ChristianZangl.SmartFind
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if (null != mcs)
       {
-        // Create the command for the menu item.
-        CommandID menuCommandID = new CommandID(GuidList.guidSmartFindCmdSet, (int)PkgCmdIDList.cmdidResetSmartFind);
-        MenuCommand menuItem = new MenuCommand(menuResetOptions, menuCommandID);
+        // Create the command for the menu items.
+				CommandID menuCommandID = new CommandID(GuidList.guidSmartFindCmdReset0, (int)PkgCmdIDList.cmdidResetSmartFind0);
+        MenuCommand menuItem = new MenuCommand((a,b)=>menuResetOptions(0), menuCommandID);
         mcs.AddCommand(menuItem);
+
+				// profile 1 menu item;
+				menuCommandID = new CommandID(GuidList.guidSmartFindCmdReset1, (int)PkgCmdIDList.cmdidResetSmartFind1);
+				menuItem = new MenuCommand((a, b) => menuResetOptions(1), menuCommandID);
+				mcs.AddCommand(menuItem);
       }
     }
 
@@ -92,22 +98,22 @@ namespace ChristianZangl.SmartFind
     /// See the Initialize method to see how the menu item is associated to this function using
     /// the OleMenuCommandService service and the MenuCommand class.
     /// </summary>
-    private void menuResetOptions(object sender, EventArgs e)
+    private void menuResetOptions(int profile)
     {
-      ResetOptions(false);
+      ResetOptions(false, profile);
     }
 
-    public void ResetOptions(bool initial)
+    public void ResetOptions(bool initial, int profile)
     {
       var dte=Package.GetGlobalService(typeof(_DTE)) as _DTE;
-      dte.ExecuteCommand("Tools.ImportandExportSettings", "/export:\""+SmartFindPackage.SettingsFile+"\"");
+      dte.ExecuteCommand("Tools.ImportandExportSettings", "/export:\""+SmartFindPackage.SettingsFile[profile]+"\"");
 
       XElement doc=null;
       for (int retry=10; ; retry--)
       {
         try
         {
-          doc=XElement.Load(SmartFindPackage.SettingsFile);
+          doc=XElement.Load(SmartFindPackage.SettingsFile[profile]);
           break;
         }
         catch { if (retry<=0) throw; else System.Threading.Thread.Sleep(500); }
@@ -136,7 +142,7 @@ namespace ChristianZangl.SmartFind
       {
         try
         {
-          doc.Save(SmartFindPackage.SettingsFile);
+          doc.Save(SmartFindPackage.SettingsFile[profile]);
           break;
         }
         catch { if (retry<=0) throw; else System.Threading.Thread.Sleep(500); }

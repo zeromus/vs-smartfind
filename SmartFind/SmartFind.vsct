@@ -61,7 +61,7 @@
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
 
-      <Button guid="guidSmartFindCmdSet" id="cmdidResetSmartFind" priority="0x0100" type="Button">
+      <Button guid="guidSmartFindCmdReset0" id="cmdidResetSmartFind0" priority="0x0100" type="Button">
         <Parent guid="guidSmartFindCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
@@ -69,9 +69,17 @@
         </Strings>
       </Button>
 
+			<Button guid="guidSmartFindCmdReset1" id="cmdidResetSmartFind1" priority="0x0101" type="Button">
+				<Parent guid="guidSmartFindCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Reset SmartFind (shift)</ButtonText>
+				</Strings>
+			</Button>
 
 
-    </Buttons>
+
+		</Buttons>
    
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
     <Bitmaps>
@@ -98,12 +106,17 @@
     <GuidSymbol name="guidSmartFindCmdSet" value="{56eca5cf-209d-45ac-a3d4-09ea3df7a7c4}">
 
       <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="cmdidResetSmartFind" value="0x0100" />
-    </GuidSymbol>
-    
-    
-    
-    <GuidSymbol name="guidImages" value="{36374388-77cd-4cbe-b816-d70828791e2d}" >
+		</GuidSymbol>
+
+
+		<GuidSymbol name="guidSmartFindCmdReset0" value="{b75ab5f1-ea6a-49ac-96b6-711346dbb6ea}">
+			<IDSymbol name="cmdidResetSmartFind0" value="0x0100" />
+		</GuidSymbol>
+		<GuidSymbol name="guidSmartFindCmdReset1" value="{2e9903df-97bd-4e7c-9796-8ab92597e288}">
+			<IDSymbol name="cmdidResetSmartFind1" value="0x0101" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidImages" value="{36374388-77cd-4cbe-b816-d70828791e2d}" >
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />
